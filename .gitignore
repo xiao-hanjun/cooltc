@@ -81,4 +81,4 @@ gradle-app.setting
 .DS_Store
 
 # Data
-# /data/
+/data/VQADatasetA_20180815/

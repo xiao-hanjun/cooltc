@@ -5,7 +5,7 @@ from __future__ import print_function
 
 import argparse
 import datetime
-import sys
+# import sys
 
 class Model(object):
     """模型"""
@@ -59,7 +59,7 @@ def main():
     model.train()
     model.predict()
     # Save to submit folder
-    filename = "submit_%s.csv" % datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+    filename = "submit_%s.txt" % datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
     model.save_result("../submit/" + filename)
 
 
