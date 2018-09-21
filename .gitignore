@@ -15,3 +15,6 @@ gradle-app.setting
 
 # Data
 data
+
+# MacOS
+.DS_Store
