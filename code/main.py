@@ -7,6 +7,7 @@ import argparse
 import datetime
 # import sys
 
+
 class Model(object):
     """模型"""
 
