@@ -5,6 +5,7 @@ from __future__ import print_function
 
 import argparse
 import datetime
+# import numpy as np
 # import sys
 
 
@@ -12,14 +13,27 @@ class Model(object):
     """模型"""
 
     def __init__(self, args):
+        # Initialize with args
         self.debug = args.debug
-        self.training_data = []
-        self.training_label = []
-        self.testing_data = []
-        self.testing_label = []
+        self.path_to_dataset_a = args.path_to_dataset_a
+        self.path_to_dataset_b = args.path_to_dataset_b
+        # Initialize fields
+        self.train_data = []
+        self.train_label = []
+        self.test_data = []
+        self.test_label = []
+
+    def log(self, *args, **kwargs):
+        """用于调试"""
+        if self.debug:
+            return print(*args, **kwargs)
 
     def read_data(self):
-        pass
+        """读入数据"""
+        self.log("===== READING DATA START =====")
+        self.log(self.path_to_dataset_a)
+        self.log(self.path_to_dataset_b)
+        self.log("===== READING DATA EMD =====")
 
     def train(self):
         pass
@@ -36,6 +50,12 @@ def parse_args():
     """设置程序参数"""
     parser = argparse.ArgumentParser(
         description = 'Process short videos and answer questions')
+    parser.add_argument('--path-to-dataset-a',
+                        default = './data/DatasetA',
+                        help = 'Path to dataset A')
+    parser.add_argument('--path-to-dataset-b',
+                        default = './data/DatasetB',
+                        help = 'Path to dataset B')
     # parser.add_argument('path_to_log_file',
     #                     help = 'path to log file which is to be analyzed')
     # parser.add_argument('-d', '--date-range',
@@ -61,7 +81,7 @@ def main():
     model.predict()
     # Save to submit folder
     filename = "submit_%s.txt" % datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
-    model.save_result("../submit/" + filename)
+    model.save_result("./submit/" + filename)
 
 
 if __name__ == '__main__':
