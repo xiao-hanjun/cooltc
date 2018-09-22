@@ -28,12 +28,20 @@ class Model(object):
         if self.debug:
             return print(*args, **kwargs)
 
+    def preprocess(self):
+        """数据预处理，将视频转换为图片"""
+        pass
+
     def read_data(self):
         """读入数据"""
         self.log("===== READING DATA START =====")
         self.log(self.path_to_dataset_a)
         self.log(self.path_to_dataset_b)
         self.log("===== READING DATA EMD =====")
+
+    def extract_feature(self):
+        """提取视频特征"""
+        pass
 
     def train(self):
         pass
@@ -77,6 +85,7 @@ def main():
     args = parse_args()
     model = Model(args)
     model.read_data()
+    model.extract_feature()
     model.train()
     model.predict()
     # Save to submit folder
