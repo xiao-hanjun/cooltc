@@ -11,6 +11,13 @@ task debug_main(type: Exec) {
     commandLine 'python', 'code/main.py', '--debug'
 }
 
+task debug_full_main(type: Exec) {
+    group 'cooltc'
+    description 'Run python solution for cooltc with debug info shown'
+    commandLine 'python', 'code/main.py', '--debug', '--path-to-dataset-a', './data/VQADatasetA_20180815/',
+            '--path-to-dataset-b', './data/VQADatasetB_20180919/'
+}
+
 task exec_main(type: Exec) {
     group 'cooltc'
     description 'Run python solution for cooltc'
