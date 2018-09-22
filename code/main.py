@@ -38,19 +38,32 @@ class Model(object):
 
         for data_type in data_types:
             image_type_path = self.path_to_images + data_type
+            subprocess.call(['mkdir', '-p', image_type_path])
             for dataset_path in dataset_paths:
                 dataset_type_path = dataset_path + data_type
                 if os.path.isdir(dataset_type_path):
-                    dataset_train_files = os.listdir(dataset_type_path)
-                    for file_name in dataset_train_files:
+                    dataset_files = os.listdir(dataset_type_path)
+                    for file_name in dataset_files:
                         if os.path.isdir(file_name):
                             self.log('[WARN] ignore directories under training data')
                             continue
+                        if file_name == '.DS_Store':
+                            self.log('[INFO] ignore %s under %s' % (file_name, dataset_type_path))
+                            continue
                         file_name_no_ext = file_name.split('.')[0]
+                        image_processed_path = image_type_path + file_name_no_ext + '.success'
+                        if os.path.isfile(image_processed_path):
+                            self.log('[INFO] video %s already processed, skipped' % file_name_no_ext)
+                            continue
                         file_path = dataset_type_path + file_name
                         image_path_pattern = '%s%s_%%3d.jpg' % (image_type_path, file_name_no_ext)
-                        self.log(file_name_no_ext, file_path, image_path_pattern)
-                        subprocess.call(['ffmpeg', '-r', '1', '-i', file_path, image_path_pattern])
+                        self.log('[INFO] Processing %s' % file_path)
+                        returncode = subprocess.call(['ffmpeg', '-v', 'error',
+                                                      '-i', file_path, '-r', '1', image_path_pattern])
+                        if returncode == 0:
+                            subprocess.call(['touch', image_processed_path])
+                        else:
+                            self.log('[WARN] video %s not processed successfully!' % file_name_no_ext)
         self.log('===== PRE-PROCESS END =====')
 
     def extract_feature(self):
