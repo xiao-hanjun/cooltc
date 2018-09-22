@@ -82,3 +82,5 @@ gradle-app.setting
 
 # Data
 /data/VQADatasetA_20180815/
+/data/VQADatasetB_20180919/
+/data/*.zip
