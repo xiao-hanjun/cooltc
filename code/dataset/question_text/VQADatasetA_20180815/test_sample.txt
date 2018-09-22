@@ -1,0 +1,3 @@
+ZJL1330,what is in the video,0,0,0,what color pants does the referee wear in the video,0,0,0,what is the person in the middle of the video doing,0,0,0,where is the person in the video,0,0,0,is the person wearing the blue in the video standing or kneeling,0,0,0
+ZJL4209,what is on the table,0,0,0,what is the color of the wall,0,0,0,what is the man in the video doing,0,0,0,where is the cup,0,0,0,is the person in the video sitting or standing,0,0,0
+ZJL669,what is in the room,0,0,0,what color of the pants does the person wear in the video,0,0,0,what is the person doing in the video,0,0,0,where is the photo frame,0,0,0,is the person standing or lying in the video,0,0,0

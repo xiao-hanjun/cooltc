@@ -1,0 +1,121 @@
+vid_name	question	answer	vid_id	key
+ZJL3540	what is in front of the chair	mirror	FRAMEQA354000	3540
+ZJL3540	what is in front of the chair	pool	FRAMEQA354001	3540
+ZJL3540	what is in front of the chair	shelf	FRAMEQA354002	3540
+ZJL3540	what is the color of the person's clothes in video	blue	FRAMEQA354003	3540
+ZJL3540	what is the color of the person's clothes in video	dark blue	FRAMEQA354004	3540
+ZJL3540	what is the color of the person's clothes in video	black blue	FRAMEQA354005	3540
+ZJL3540	what is the person doing in video	cleaning up	FRAMEQA354006	3540
+ZJL3540	what is the person doing in video	wiping mirror	FRAMEQA354007	3540
+ZJL3540	what is the person doing in video	washing cup	FRAMEQA354008	3540
+ZJL3540	where is the person in video	indoor	FRAMEQA354009	3540
+ZJL3540	where is the person in video	washroom	FRAMEQA354010	3540
+ZJL3540	where is the person in video	residence	FRAMEQA354011	3540
+ZJL3540	is the person sitting or standing in the video	standing	FRAMEQA354012	3540
+ZJL3540	is the person sitting or standing in the video	standing	FRAMEQA354013	3540
+ZJL3540	is the person sitting or standing in the video	standing	FRAMEQA354014	3540
+ZJL2495	what is the color of the clothes of the woman in the video	white	FRAMEQA249500	2495
+ZJL2495	what is the color of the clothes of the woman in the video	white	FRAMEQA249501	2495
+ZJL2495	what is the color of the clothes of the woman in the video	white	FRAMEQA249502	2495
+ZJL2495	what is the person doing in the video	kissing	FRAMEQA249503	2495
+ZJL2495	what is the person doing in the video	kissing	FRAMEQA249504	2495
+ZJL2495	what is the person doing in the video	kissing	FRAMEQA249505	2495
+ZJL2495	is the person sitting or lying in the video	lying	FRAMEQA249506	2495
+ZJL2495	is the person sitting or lying in the video	lying	FRAMEQA249507	2495
+ZJL2495	is the person sitting or lying in the video	lying	FRAMEQA249508	2495
+ZJL2495	where is the person in the video	on bed	FRAMEQA249509	2495
+ZJL2495	where is the person in the video	on bed	FRAMEQA249510	2495
+ZJL2495	where is the person in the video	on bed	FRAMEQA249511	2495
+ZJL2495	does the woman have long hair or short hair in the video	long hair	FRAMEQA249512	2495
+ZJL2495	does the woman have long hair or short hair in the video	long hair	FRAMEQA249513	2495
+ZJL2495	does the woman have long hair or short hair in the video	long hair	FRAMEQA249514	2495
+ZJL963	what color of the clothes does the person wear in the video	white	FRAMEQA96300	963
+ZJL963	what color of the clothes does the person wear in the video	light white	FRAMEQA96301	963
+ZJL963	what color of the clothes does the person wear in the video	pure white	FRAMEQA96302	963
+ZJL963	is the person sitting or standing in the video	standing	FRAMEQA96303	963
+ZJL963	is the person sitting or standing in the video	sitting	FRAMEQA96304	963
+ZJL963	is the person sitting or standing in the video	sitting	FRAMEQA96305	963
+ZJL963	where is the person in the video	kitchen	FRAMEQA96306	963
+ZJL963	where is the person in the video	kitchen	FRAMEQA96307	963
+ZJL963	where is the person in the video	kitchen	FRAMEQA96308	963
+ZJL963	what is the person doing in the video	drinking water	FRAMEQA96309	963
+ZJL963	what is the person doing in the video	drinking milk	FRAMEQA96310	963
+ZJL963	what is the person doing in the video	drinking water	FRAMEQA96311	963
+ZJL963	where is the book	on table	FRAMEQA96312	963
+ZJL963	where is the book	on table	FRAMEQA96313	963
+ZJL963	where is the book	on table	FRAMEQA96314	963
+ZJL1836	which layer of the cabinet is the water cup put in the video	third	FRAMEQA183600	1836
+ZJL1836	which layer of the cabinet is the water cup put in the video	third	FRAMEQA183601	1836
+ZJL1836	which layer of the cabinet is the water cup put in the video	third	FRAMEQA183602	1836
+ZJL1836	what color of the jacket does the person wear in the video	pure black	FRAMEQA183603	1836
+ZJL1836	what color of the jacket does the person wear in the video	black	FRAMEQA183604	1836
+ZJL1836	what color of the jacket does the person wear in the video	dark black	FRAMEQA183605	1836
+ZJL1836	what is the person in the video doing	opening cabinet	FRAMEQA183606	1836
+ZJL1836	what is the person in the video doing	drinking water	FRAMEQA183607	1836
+ZJL1836	what is the person in the video doing	drinking water	FRAMEQA183608	1836
+ZJL1836	where did the person get the cup	cabinet	FRAMEQA183609	1836
+ZJL1836	where did the person get the cup	cabinet	FRAMEQA183610	1836
+ZJL1836	where did the person get the cup	cabinet	FRAMEQA183611	1836
+ZJL1836	is the person sitting or standing in the video	standing	FRAMEQA183612	1836
+ZJL1836	is the person sitting or standing in the video	standing	FRAMEQA183613	1836
+ZJL1836	is the person sitting or standing in the video	standing	FRAMEQA183614	1836
+ZJL2487	what color does the person wear in the video	pink	FRAMEQA248700	2487
+ZJL2487	what color does the person wear in the video	light-pink	FRAMEQA248701	2487
+ZJL2487	what color does the person wear in the video	peach-pink	FRAMEQA248702	2487
+ZJL2487	what is the person doing in the video	broadcasting	FRAMEQA248703	2487
+ZJL2487	what is the person doing in the video	entertainment	FRAMEQA248704	2487
+ZJL2487	what is the person doing in the video	new	FRAMEQA248705	2487
+ZJL2487	what does the super star wear in the video	swimsuit	FRAMEQA248706	2487
+ZJL2487	what does the super star wear in the video	swimsuit	FRAMEQA248707	2487
+ZJL2487	what does the super star wear in the video	swimsuit	FRAMEQA248708	2487
+ZJL2487	where is the superstar in the video	in water	FRAMEQA248709	2487
+ZJL2487	where is the superstar in the video	in water	FRAMEQA248710	2487
+ZJL2487	where is the superstar in the video	in water	FRAMEQA248711	2487
+ZJL2487	is the person standing or sitting in the video	standing	FRAMEQA248712	2487
+ZJL2487	is the person standing or sitting in the video	standing	FRAMEQA248713	2487
+ZJL2487	is the person standing or sitting in the video	standing	FRAMEQA248714	2487
+ZJL3886	what is in the living room	tv	FRAMEQA388600	3886
+ZJL3886	what is in the living room	sofa	FRAMEQA388601	3886
+ZJL3886	what is in the living room	table	FRAMEQA388602	3886
+ZJL3886	what color is the wall	white	FRAMEQA388603	3886
+ZJL3886	what color is the wall	milk white	FRAMEQA388604	3886
+ZJL3886	what color is the wall	off-white	FRAMEQA388605	3886
+ZJL3886	what is the person in video doing	pushing tv button	FRAMEQA388606	3886
+ZJL3886	what is the person in video doing	pushing tv button	FRAMEQA388607	3886
+ZJL3886	what is the person in video doing	pushing tv button	FRAMEQA388608	3886
+ZJL3886	where is the person in video	in living room	FRAMEQA388609	3886
+ZJL3886	where is the person in video	indoor	FRAMEQA388610	3886
+ZJL3886	where is the person in video	in room	FRAMEQA388611	3886
+ZJL3886	is the person in video sitting or standing	standing	FRAMEQA388612	3886
+ZJL3886	is the person in video sitting or standing	standing	FRAMEQA388613	3886
+ZJL3886	is the person in video sitting or standing	standing	FRAMEQA388614	3886
+ZJL2952	what is on the desk	book	FRAMEQA295200	2952
+ZJL2952	what is on the desk	phone	FRAMEQA295201	2952
+ZJL2952	what is on the desk	computer	FRAMEQA295202	2952
+ZJL2952	what is the color of the trousers the man wears	black	FRAMEQA295203	2952
+ZJL2952	what is the color of the trousers the man wears	white	FRAMEQA295204	2952
+ZJL2952	what is the color of the trousers the man wears	blue	FRAMEQA295205	2952
+ZJL2952	what is the man doing	taking clothes	FRAMEQA295206	2952
+ZJL2952	what is the man doing	clearing up	FRAMEQA295207	2952
+ZJL2952	what is the man doing	playing phone	FRAMEQA295208	2952
+ZJL2952	was the man standing or sitting in the end	standing	FRAMEQA295209	2952
+ZJL2952	was the man standing or sitting in the end	standing	FRAMEQA295210	2952
+ZJL2952	was the man standing or sitting in the end	standing	FRAMEQA295211	2952
+ZJL2952	where is the man	in door	FRAMEQA295212	2952
+ZJL2952	where is the man	in door	FRAMEQA295213	2952
+ZJL2952	where is the man	in door	FRAMEQA295214	2952
+ZJL927	what color of the clothes does the person wear in the video	brown	FRAMEQA92700	927
+ZJL927	what color of the clothes does the person wear in the video	light brown	FRAMEQA92701	927
+ZJL927	what color of the clothes does the person wear in the video	rustic brown	FRAMEQA92702	927
+ZJL927	is the person sitting or standing in the video	standing	FRAMEQA92703	927
+ZJL927	is the person sitting or standing in the video	standing	FRAMEQA92704	927
+ZJL927	is the person sitting or standing in the video	standing	FRAMEQA92705	927
+ZJL927	where is the person in the video	bathroom	FRAMEQA92706	927
+ZJL927	where is the person in the video	bathroom	FRAMEQA92707	927
+ZJL927	where is the person in the video	bathroom	FRAMEQA92708	927
+ZJL927	what is the person doing in the video	looking at mirror	FRAMEQA92709	927
+ZJL927	what is the person doing in the video	taking off clothes	FRAMEQA92710	927
+ZJL927	what is the person doing in the video	wiping arms	FRAMEQA92711	927
+ZJL927	where is the towel	on shelf	FRAMEQA92712	927
+ZJL927	where is the towel	on shelf	FRAMEQA92713	927
+ZJL927	where is the towel	on shelf	FRAMEQA92714	927
