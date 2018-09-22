@@ -5,8 +5,9 @@ from __future__ import print_function
 
 import argparse
 import datetime
+import os
 # import numpy as np
-# import sys
+import subprocess
 
 
 class Model(object):
@@ -15,6 +16,7 @@ class Model(object):
     def __init__(self, args):
         # Initialize with args
         self.debug = args.debug
+        self.path_to_images = args.path_to_images
         self.path_to_dataset_a = args.path_to_dataset_a
         self.path_to_dataset_b = args.path_to_dataset_b
         # Initialize fields
@@ -28,16 +30,28 @@ class Model(object):
         if self.debug:
             return print(*args, **kwargs)
 
-    def preprocess(self):
-        """数据预处理，将视频转换为图片"""
-        pass
+    def pre_process(self):
+        """数据预处理，将输入数据（视频）转换为图片"""
+        self.log('===== PRE-PROCESS START =====')
+        dataset_paths = [self.path_to_dataset_a, self.path_to_dataset_b]
+        data_types = ['train/', 'test/']
 
-    def read_data(self):
-        """读入数据"""
-        self.log("===== READING DATA START =====")
-        self.log(self.path_to_dataset_a)
-        self.log(self.path_to_dataset_b)
-        self.log("===== READING DATA EMD =====")
+        for data_type in data_types:
+            image_type_path = self.path_to_images + data_type
+            for dataset_path in dataset_paths:
+                dataset_type_path = dataset_path + data_type
+                if os.path.isdir(dataset_type_path):
+                    dataset_train_files = os.listdir(dataset_type_path)
+                    for file_name in dataset_train_files:
+                        if os.path.isdir(file_name):
+                            self.log('[WARN] ignore directories under training data')
+                            continue
+                        file_name_no_ext = file_name.split('.')[0]
+                        file_path = dataset_type_path + file_name
+                        image_path_pattern = '%s%s_%%3d.jpg' % (image_type_path, file_name_no_ext)
+                        self.log(file_name_no_ext, file_path, image_path_pattern)
+                        subprocess.call(['ffmpeg', '-r', '1', '-i', file_path, image_path_pattern])
+        self.log('===== PRE-PROCESS END =====')
 
     def extract_feature(self):
         """提取视频特征"""
@@ -58,11 +72,14 @@ def parse_args():
     """设置程序参数"""
     parser = argparse.ArgumentParser(
         description = 'Process short videos and answer questions')
+    parser.add_argument('--path-to-images',
+                        default = './data/images/',
+                        help = 'Path to images')
     parser.add_argument('--path-to-dataset-a',
-                        default = './data/DatasetA',
+                        default = './data/DatasetA/',
                         help = 'Path to dataset A')
     parser.add_argument('--path-to-dataset-b',
-                        default = './data/DatasetB',
+                        default = './data/DatasetB/',
                         help = 'Path to dataset B')
     # parser.add_argument('path_to_log_file',
     #                     help = 'path to log file which is to be analyzed')
@@ -84,13 +101,13 @@ def parse_args():
 def main():
     args = parse_args()
     model = Model(args)
-    model.read_data()
+    model.pre_process()
     model.extract_feature()
     model.train()
     model.predict()
     # Save to submit folder
-    filename = "submit_%s.txt" % datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
-    model.save_result("./submit/" + filename)
+    filename = 'submit_%s.txt' % datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+    model.save_result('./submit/' + filename)
 
 
 if __name__ == '__main__':
