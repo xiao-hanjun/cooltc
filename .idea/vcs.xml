@@ -4,5 +4,6 @@
     <mapping directory="" vcs="Git" />
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/code/TF_FeatureExtraction" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/code/tgif-qa" vcs="Git" />
   </component>
 </project>
