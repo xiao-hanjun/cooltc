@@ -102,6 +102,8 @@ class Model(object):
                 for img in sampled_video_images:
                     path_to_img = image_type_path + img
                     subprocess.call(['cp', path_to_img, sampled_image_type_path])
+                sampled_video_success = sampled_image_type_path + video_success
+                subprocess.call(['touch', sampled_video_success])
 
         self.log('===== SAMPLING END =====')
 
