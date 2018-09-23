@@ -19,6 +19,7 @@ class Model(object):
         # Initialize with args
         self.debug = args.debug
         self.logits_layer = 'logits'
+        self.path_to_submit_file = args.path_to_submit_file
         self.path_to_checkpoints = args.path_to_checkpoints
         self.path_to_images = args.path_to_images
         self.path_to_features = args.path_to_features
@@ -38,9 +39,9 @@ class Model(object):
     def pre_process(self):
         """数据预处理，将输入数据（视频）转换为图片"""
         self.log('\n===== PRE-PROCESSING START =====')
+
         dataset_paths = [self.path_to_dataset_a, self.path_to_dataset_b]
         data_types = ['train', 'test']
-
         for data_type in data_types:
             image_type_path = self.path_to_images + data_type + '/'
             subprocess.call(['mkdir', '-p', image_type_path])
@@ -69,13 +70,14 @@ class Model(object):
                             subprocess.call(['touch', image_processed_path])
                         else:
                             self.log('[WARN] video %s not processed successfully!' % file_name_no_ext)
+
         self.log('===== PRE-PROCESSING END =====')
 
     def sample(self, limit, path_to_sampled_images):
         """为每个视频采样指定张数的图片"""
         self.log('\n===== SAMPLING START =====')
-        data_types = ['train', 'test']
 
+        data_types = ['train', 'test']
         for data_type in data_types:
             image_type_path = self.path_to_images + data_type + '/'
             sampled_image_type_path = path_to_sampled_images + data_type + '/'
@@ -108,8 +110,8 @@ class Model(object):
         """提取视频特征"""
         self.log('\n===== FEATURE EXTRACTION START =====')
 
-        data_types = ['train', 'test']
         subprocess.call(['mkdir', '-p', self.path_to_features])
+        data_types = ['train', 'test']
         for data_type in data_types:
             image_type_path = self.path_to_images + data_type + '/'
             out_file = self.path_to_features + data_type + '.h5'
@@ -137,6 +139,7 @@ class Model(object):
     def train(self):
         """训练模型"""
         self.log('\n===== TRAINING PHASE START =====')
+
         train_feature_file = self.path_to_features + 'train.h5'
         feat_h5 = h5py.File(train_feature_file, 'r')
         self.log('[INFO] [feat_ht]', feat_h5)
@@ -161,17 +164,24 @@ class Model(object):
         self.log('===== TRAINING PHASE END =====')
 
     def predict(self):
-        pass
+        """预测测试数据"""
+        self.log('\n===== PREDICTION PHASE START =====')
 
-    def save_result(self, path_to_submit_file):
-        pass
-        # self.testing_label.to_csv(path_to_submit_file, header=None, index=False)
+        self.log('===== PREDICTION PHASE END =====')
+
+        # 存储结果
+        self.log('\nSaving result to %s' % self.path_to_submit_file)
+        # self.testing_label.to_csv(self.path_to_submit_file, header=None, index=False)
 
 
 def parse_args():
     """设置程序参数"""
     parser = argparse.ArgumentParser(
         description = 'Process short videos and answer questions')
+    filename = 'submit_%s.txt' % datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+    parser.add_argument('--path-to-submit-file',
+                        default='./submit/' + filename,
+                        help='Path to submit file')
     parser.add_argument('--path-to-checkpoints',
                         default = '/Users/hanjunx/workspace/tensorflow/checkpoints/',
                         help = 'Path to checkpoints')
@@ -208,9 +218,6 @@ def main():
     # model.extract_feature()
     # model.train()
     # model.predict()
-    # Save to submit folder
-    filename = 'submit_%s.txt' % datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
-    model.save_result('./submit/' + filename)
 
 
 if __name__ == '__main__':
