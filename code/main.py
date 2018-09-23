@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function
+from __future__ import division
 
 import argparse
 import datetime
@@ -36,7 +37,7 @@ class Model(object):
 
     def pre_process(self):
         """数据预处理，将输入数据（视频）转换为图片"""
-        self.log('===== PRE-PROCESSING START =====')
+        self.log('\n===== PRE-PROCESSING START =====')
         dataset_paths = [self.path_to_dataset_a, self.path_to_dataset_b]
         data_types = ['train', 'test']
 
@@ -70,9 +71,43 @@ class Model(object):
                             self.log('[WARN] video %s not processed successfully!' % file_name_no_ext)
         self.log('===== PRE-PROCESSING END =====')
 
+    def sample(self, limit, path_to_sampled_images):
+        """为每个视频采样指定张数的图片"""
+        self.log('\n===== SAMPLING START =====')
+        data_types = ['train', 'test']
+
+        for data_type in data_types:
+            image_type_path = self.path_to_images + data_type + '/'
+            sampled_image_type_path = path_to_sampled_images + data_type + '/'
+            subprocess.call(['mkdir', '-p', sampled_image_type_path])
+            if not os.path.isdir(image_type_path):
+                self.log('[ERROR] images folder not existed!')
+                return
+            image_files = os.listdir(image_type_path)
+            success_files = [x for x in image_files if x.endswith('.success')]
+            self.log('[INFO]', success_files)
+            for video_success in success_files:
+                video_id = video_success.split('.')[0]
+                video_images = [x for x in image_files if x.startswith(video_id + '_')]
+                video_images.sort()
+                frame_cnt = len(video_images)
+                self.log('[INFO]', video_id, frame_cnt)
+                block_size = frame_cnt // (limit + 1)
+                indexs = [block_size * x for x in range(1, limit + 1)]
+                # self.log('[DEBUG]', indexs)
+                sampled_video_images = [video_images[idx] for idx in indexs]
+                self.log('[INFO]', sampled_video_images)
+                for img in sampled_video_images:
+                    path_to_img = image_type_path + img
+                    subprocess.call(['cp', path_to_img, sampled_image_type_path])
+
+        self.log('===== SAMPLING END =====')
+
+
     def extract_feature(self):
         """提取视频特征"""
         self.log('\n===== FEATURE EXTRACTION START =====')
+
         data_types = ['train', 'test']
         subprocess.call(['mkdir', '-p', self.path_to_features])
         for data_type in data_types:
@@ -96,6 +131,7 @@ class Model(object):
                 self.log('[INFO] feature extraction for %s succeeded!' % data_type)
             else:
                 self.log('[ERROR] feature extraction for %s failed!' % data_type)
+
         self.log('===== FEATURE EXTRACTION END =====')
 
     def train(self):
@@ -122,7 +158,7 @@ class Model(object):
         np_logits = np.array(logits)
         self.log('[INFO] [np_logits]', np_logits)
 
-        self.log('\n===== TRAINING PHASE END =====')
+        self.log('===== TRAINING PHASE END =====')
 
     def predict(self):
         pass
@@ -139,6 +175,12 @@ def parse_args():
     parser.add_argument('--path-to-checkpoints',
                         default = '/Users/hanjunx/workspace/tensorflow/checkpoints/',
                         help = 'Path to checkpoints')
+    parser.add_argument('--path-to-sampled-images-1fpv',
+                        default = './data/images_1fpv/',
+                        help = 'Path to images (1 frames per video)')
+    parser.add_argument('--path-to-sampled-images-5fpv',
+                        default = './data/images_5fpv/',
+                        help = 'Path to images (5 frames per video)')
     parser.add_argument('--path-to-images',
                         default = './data/images/',
                         help = 'Path to images')
@@ -151,17 +193,6 @@ def parse_args():
     parser.add_argument('--path-to-dataset-b',
                         default = './data/DatasetB/',
                         help = 'Path to dataset B')
-    # parser.add_argument('path_to_log_file',
-    #                     help = 'path to log file which is to be analyzed')
-    # parser.add_argument('-d', '--date-range',
-    #                     default = '-',
-    #                     help = 'count records within [YYYYmmdd]-[YYYYmmdd], '
-    #                            'the default start and end date are 00010101 '
-    #                            'and 99991231')
-    # parser.add_argument('os_name',
-    #                     nargs = '*',
-    #                     help = 'show statistics for the provided OS. '
-    #                            'Default to show statistics for all OS')
     parser.add_argument("-d", "--debug", action="store_true",
                         help="show debug message")
     args = parser.parse_args()
@@ -172,9 +203,11 @@ def main():
     args = parse_args()
     model = Model(args)
     # model.pre_process()
-    model.extract_feature()
-    model.train()
-    model.predict()
+    model.sample(1, args.path_to_sampled_images_1fpv)
+    model.sample(5, args.path_to_sampled_images_5fpv)
+    # model.extract_feature()
+    # model.train()
+    # model.predict()
     # Save to submit folder
     filename = 'submit_%s.txt' % datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
     model.save_result('./submit/' + filename)
