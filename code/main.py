@@ -5,8 +5,9 @@ from __future__ import print_function
 
 import argparse
 import datetime
+import h5py
+import numpy as np
 import os
-# import numpy as np
 import subprocess
 
 
@@ -16,6 +17,7 @@ class Model(object):
     def __init__(self, args):
         # Initialize with args
         self.debug = args.debug
+        self.logits_layer = 'logits'
         self.path_to_checkpoints = args.path_to_checkpoints
         self.path_to_images = args.path_to_images
         self.path_to_features = args.path_to_features
@@ -76,15 +78,20 @@ class Model(object):
         for data_type in data_types:
             image_type_path = self.path_to_images + data_type + '/'
             out_file = self.path_to_features + data_type + '.h5'
+            if os.path.isfile(out_file):
+                self.log('[INFO] feature for %s already extracted, skipped' % data_type)
+                continue
             network = 'resnet_v2_152'
             path_to_resnet_checkpoint = self.path_to_checkpoints + 'resnet_v2_152_2017_04_14/resnet_v2_152.ckpt'
+            layer_names = network + '/' + self.logits_layer
+            preproc_func = 'inception'
             returncode = subprocess.call(['python', './code/TF_FeatureExtraction/example_feat_extract.py',
                                           '--network', network,
                                           '--checkpoint', path_to_resnet_checkpoint,
                                           '--image_path', image_type_path,
                                           '--out_file', out_file,
-                                          '--layer_names', network + '/logits',
-                                          '--preproc_func', 'inception'])
+                                          '--layer_names', layer_names,
+                                          '--preproc_func', preproc_func])
             if returncode == 0:
                 self.log('[INFO] feature extraction for %s succeeded!' % data_type)
             else:
@@ -92,7 +99,30 @@ class Model(object):
         self.log('===== FEATURE EXTRACTION END =====')
 
     def train(self):
-        pass
+        """训练模型"""
+        self.log('\n===== TRAINING PHASE START =====')
+        train_feature_file = self.path_to_features + 'train.h5'
+        feat_h5 = h5py.File(train_feature_file, 'r')
+        self.log('[INFO] [feat_ht]', feat_h5)
+        # self.log('[DEBUG] [feat_ht]', dir(feat_h5))
+
+        # Filenames
+        filenames = feat_h5['filenames']
+        self.log('[INFO] [filenames]', filenames)
+        np_filenames = np.array(filenames)
+        self.log('[INFO] [np_filenames]', np_filenames)
+
+        # Resnet
+        resnet_v2_152 = feat_h5['resnet_v2_152']
+        self.log('[INFO] [resnet_v2_152]', resnet_v2_152)
+        # self.log('[DEBUG] [resnet_v2_152]', dir(resnet_v2_152))
+        logits = resnet_v2_152[self.logits_layer]
+        self.log('[INFO] [resnet_v2_152.layer]', logits)
+        # self.log('[DEBUG] [resnet_v2_152.layer]', dir(logits))
+        np_logits = np.array(logits)
+        self.log('[INFO] [np_logits]', np_logits)
+
+        self.log('\n===== TRAINING PHASE END =====')
 
     def predict(self):
         pass
