@@ -47,7 +47,7 @@ task debug_full_main(type: Exec) {
             '--path-to-dataset-b', './data/VQADatasetB_20180919/'
 }
 
-task debug_full_main(type: Exec) {
+task debug_full_main_yuan(type: Exec) {
     group 'cooltc'
     description 'Run python solution for cooltc with debug info shown'
     commandLine 'python', 'code/main.py', '--debug',
