@@ -124,13 +124,15 @@ class Model(object):
             path_to_resnet_checkpoint = self.path_to_checkpoints + 'resnet_v2_152_2017_04_14/resnet_v2_152.ckpt'
             layer_names = network + '/' + self.logits_layer
             preproc_func = 'inception'
-            returncode = subprocess.call(['python', './code/TF_FeatureExtraction/example_feat_extract.py',
-                                          '--network', network,
-                                          '--checkpoint', path_to_resnet_checkpoint,
-                                          '--image_path', image_type_path,
-                                          '--out_file', out_file,
-                                          '--layer_names', layer_names,
-                                          '--preproc_func', preproc_func])
+            cmd = ['python', './code/TF_FeatureExtraction/example_feat_extract.py',
+                   '--network', network,
+                   '--checkpoint', path_to_resnet_checkpoint,
+                   '--image_path', image_type_path,
+                   '--out_file', out_file,
+                   '--layer_names', layer_names,
+                   '--preproc_func', preproc_func]
+            self.log('[INFO] [CMD]', ' '.join(cmd))
+            returncode = subprocess.call(cmd)
             if returncode == 0:
                 self.log('[INFO] feature extraction for %s succeeded!' % data_type)
             else:
@@ -215,9 +217,9 @@ def main():
     args = parse_args()
     model = Model(args)
     # model.pre_process()
-    model.sample(1, args.path_to_sampled_images_1fpv)
-    model.sample(5, args.path_to_sampled_images_5fpv)
-    # model.extract_feature()
+    # model.sample(1, args.path_to_sampled_images_1fpv)
+    # model.sample(5, args.path_to_sampled_images_5fpv)
+    model.extract_feature()
     # model.train()
     # model.predict()
 
