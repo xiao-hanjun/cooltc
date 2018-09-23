@@ -104,10 +104,10 @@ def parse_args():
     parser = argparse.ArgumentParser(
         description = 'Process short videos and answer questions')
     parser.add_argument('--path-to-images',
-                        default = './data/images/',
+                        default = './data/images_sample/',
                         help = 'Path to images')
     parser.add_argument('--path-to-features',
-                        default = './data/features/',
+                        default = './data/features_sample/',
                         help = 'Path to features')
     parser.add_argument('--path-to-dataset-a',
                         default = './data/DatasetA/',
@@ -135,7 +135,7 @@ def parse_args():
 def main():
     args = parse_args()
     model = Model(args)
-    model.pre_process()
+    # model.pre_process()
     model.extract_feature()
     model.train()
     model.predict()
