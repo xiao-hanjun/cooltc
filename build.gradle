@@ -5,21 +5,53 @@
  * Learn how to create Gradle builds at https://guides.gradle.org/creating-new-gradle-builds/
  */
 
+task exec_main(type: Exec) {
+    group 'cooltc'
+    description 'Run python solution for cooltc'
+    commandLine 'python', 'code/main.py'
+}
+
 task debug_main(type: Exec) {
     group 'cooltc'
     description 'Run python solution for cooltc with debug info shown'
     commandLine 'python', 'code/main.py', '--debug'
 }
 
+task debug_main_yuan(type: Exec) {
+    group 'cooltc'
+    description 'Run python solution for cooltc with debug info shown'
+    commandLine 'python', 'code/main.py', '--debug',
+            '--path-to-checkpoints', '/Users/yuan/MyDocument/workspace/Python/tensorflow_model/checkpoints/'
+}
+
+task debug_sample_main(type: Exec) {
+    group 'cooltc'
+    description 'Run python solution for cooltc with debug info shown'
+    commandLine 'python', 'code/main.py', '--debug',
+            '--path-to-images', './data/images_sample/', '--path-to-features', './data/features_sample/'
+}
+
+task debug_sample_main_yuan(type: Exec) {
+    group 'cooltc'
+    description 'Run python solution for cooltc with debug info shown'
+    commandLine 'python', 'code/main.py', '--debug',
+            '--path-to-images', './data/images_sample/', '--path-to-features', './data/features_sample/',
+            '--path-to-checkpoints', '/Users/yuan/MyDocument/workspace/Python/tensorflow_model/checkpoints/'
+}
+
 task debug_full_main(type: Exec) {
     group 'cooltc'
     description 'Run python solution for cooltc with debug info shown'
-    commandLine 'python', 'code/main.py', '--debug', '--path-to-dataset-a', './data/VQADatasetA_20180815/',
+    commandLine 'python', 'code/main.py', '--debug',
+            '--path-to-dataset-a', './data/VQADatasetA_20180815/',
             '--path-to-dataset-b', './data/VQADatasetB_20180919/'
 }
 
-task exec_main(type: Exec) {
+task debug_full_main(type: Exec) {
     group 'cooltc'
-    description 'Run python solution for cooltc'
-    commandLine 'python', 'code/main.py'
+    description 'Run python solution for cooltc with debug info shown'
+    commandLine 'python', 'code/main.py', '--debug',
+            '--path-to-dataset-a', './data/VQADatasetA_20180815/',
+            '--path-to-dataset-b', './data/VQADatasetB_20180919/',
+            '--path-to-checkpoints', '/Users/yuan/MyDocument/workspace/Python/tensorflow_model/checkpoints/'
 }

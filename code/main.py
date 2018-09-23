@@ -16,6 +16,7 @@ class Model(object):
     def __init__(self, args):
         # Initialize with args
         self.debug = args.debug
+        self.path_to_checkpoints = args.path_to_checkpoints
         self.path_to_images = args.path_to_images
         self.path_to_features = args.path_to_features
         self.path_to_dataset_a = args.path_to_dataset_a
@@ -75,12 +76,14 @@ class Model(object):
         for data_type in data_types:
             image_type_path = self.path_to_images + data_type + '/'
             out_file = self.path_to_features + data_type + '.h5'
+            network = 'resnet_v2_152'
+            path_to_resnet_checkpoint = self.path_to_checkpoints + 'resnet_v2_152_2017_04_14/resnet_v2_152.ckpt'
             returncode = subprocess.call(['python', './code/TF_FeatureExtraction/example_feat_extract.py',
-                                          '--network', 'resnet_v2_152', '--checkpoint',
-                                          '/Users/hanjunx/workspace/tensorflow/checkpoints/resnet_v2_152_2017_04_14/resnet_v2_152.ckpt',
+                                          '--network', network,
+                                          '--checkpoint', path_to_resnet_checkpoint,
                                           '--image_path', image_type_path,
                                           '--out_file', out_file,
-                                          '--layer_names', 'resnet_v2_152/logits',
+                                          '--layer_names', network + '/logits',
                                           '--preproc_func', 'inception'])
             if returncode == 0:
                 self.log('[INFO] feature extraction for %s succeeded!' % data_type)
@@ -103,11 +106,14 @@ def parse_args():
     """设置程序参数"""
     parser = argparse.ArgumentParser(
         description = 'Process short videos and answer questions')
+    parser.add_argument('--path-to-checkpoints',
+                        default = '/Users/hanjunx/workspace/tensorflow/checkpoints/',
+                        help = 'Path to checkpoints')
     parser.add_argument('--path-to-images',
-                        default = './data/images_sample/',
+                        default = './data/images/',
                         help = 'Path to images')
     parser.add_argument('--path-to-features',
-                        default = './data/features_sample/',
+                        default = './data/features/',
                         help = 'Path to features')
     parser.add_argument('--path-to-dataset-a',
                         default = './data/DatasetA/',
