@@ -80,8 +80,6 @@ class Model(object):
         data_types = ['train', 'test']
         for data_type in data_types:
             image_type_path = self.path_to_images + data_type + '/'
-            sampled_image_type_path = path_to_sampled_images + data_type + '/'
-            subprocess.call(['mkdir', '-p', sampled_image_type_path])
             if not os.path.isdir(image_type_path):
                 self.log('[ERROR] images folder not existed!')
                 return
@@ -90,6 +88,11 @@ class Model(object):
             self.log('[INFO]', success_files)
             for video_success in success_files:
                 video_id = video_success.split('.')[0]
+                sampled_image_path = path_to_sampled_images + data_type + '/' + video_id + '/'
+                if os.path.isdir(sampled_image_path):
+                    self.log('[INFO] sampled images for video %s already existed. skipped.' % video_id)
+                    return
+                subprocess.call(['mkdir', '-p', sampled_image_path])
                 video_images = [x for x in image_files if x.startswith(video_id + '_')]
                 video_images.sort()
                 frame_cnt = len(video_images)
@@ -101,9 +104,7 @@ class Model(object):
                 self.log('[INFO]', sampled_video_images)
                 for img in sampled_video_images:
                     path_to_img = image_type_path + img
-                    subprocess.call(['cp', path_to_img, sampled_image_type_path])
-                sampled_video_success = sampled_image_type_path + video_success
-                subprocess.call(['touch', sampled_video_success])
+                    subprocess.call(['cp', path_to_img, sampled_image_path])
 
         self.log('===== SAMPLING END =====')
 
