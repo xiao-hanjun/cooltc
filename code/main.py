@@ -143,9 +143,9 @@ class Model(object):
                 self.log('[INFO] [CMD]', ' '.join(cmd))
                 returncode = subprocess.call(cmd)
                 if returncode == 0:
-                    self.log('[INFO] feature extraction for %s succeeded!' % data_type)
+                    self.log('[INFO] feature extraction for %s succeeded!' % image_path)
                 else:
-                    self.log('[ERROR] feature extraction for %s failed!' % data_type)
+                    self.log('[ERROR] feature extraction for %s failed!' % image_path)
 
         self.log('===== FEATURE EXTRACTION END =====')
 
