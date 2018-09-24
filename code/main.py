@@ -116,28 +116,34 @@ class Model(object):
         subprocess.call(['mkdir', '-p', self.path_to_features])
         data_types = ['train', 'test']
         for data_type in data_types:
+            out_type_path = self.path_to_features + data_type + '/'
+            subprocess.call(['mkdir', '-p', out_type_path])
             image_type_path = self.path_to_images + data_type + '/'
-            out_file = self.path_to_features + data_type + '.h5'
-            if os.path.isfile(out_file):
-                self.log('[INFO] feature for %s already extracted, skipped' % data_type)
-                continue
-            network = 'resnet_v2_152'
-            path_to_resnet_checkpoint = self.path_to_checkpoints + 'resnet_v2_152_2017_04_14/resnet_v2_152.ckpt'
-            layer_names = self.pool_layer
-            preproc_func = 'inception'
-            cmd = ['python', './code/TF_FeatureExtraction/example_feat_extract.py',
-                   '--network', network,
-                   '--checkpoint', path_to_resnet_checkpoint,
-                   '--image_path', image_type_path,
-                   '--out_file', out_file,
-                   '--layer_names', layer_names,
-                   '--preproc_func', preproc_func]
-            self.log('[INFO] [CMD]', ' '.join(cmd))
-            returncode = subprocess.call(cmd)
-            if returncode == 0:
-                self.log('[INFO] feature extraction for %s succeeded!' % data_type)
-            else:
-                self.log('[ERROR] feature extraction for %s failed!' % data_type)
+            image_dirs = os.listdir(image_type_path)
+            for image_id in image_dirs:
+                out_file = out_type_path + image_id + '.h5'
+                self.log('[INFO]', out_file)
+                if os.path.isfile(out_file):
+                    self.log('[INFO] feature for %s already extracted, skipped' % data_type)
+                    continue
+                image_path = image_type_path + image_id + '/'
+                network = 'resnet_v2_152'
+                path_to_resnet_checkpoint = self.path_to_checkpoints + 'resnet_v2_152_2017_04_14/resnet_v2_152.ckpt'
+                layer_names = self.pool_layer
+                preproc_func = 'inception'
+                cmd = ['python', './code/TF_FeatureExtraction/example_feat_extract.py',
+                       '--network', network,
+                       '--checkpoint', path_to_resnet_checkpoint,
+                       '--image_path', image_path,
+                       '--out_file', out_file,
+                       '--layer_names', layer_names,
+                       '--preproc_func', preproc_func]
+                self.log('[INFO] [CMD]', ' '.join(cmd))
+                returncode = subprocess.call(cmd)
+                if returncode == 0:
+                    self.log('[INFO] feature extraction for %s succeeded!' % data_type)
+                else:
+                    self.log('[ERROR] feature extraction for %s failed!' % data_type)
 
         self.log('===== FEATURE EXTRACTION END =====')
 
@@ -227,7 +233,7 @@ def main():
     # model.sample(1, args.path_to_sampled_images_1fpv)
     # model.sample(5, args.path_to_sampled_images_5fpv)
     model.extract_feature()
-    model.train()
+    # model.train()
     # model.predict()
 
 
