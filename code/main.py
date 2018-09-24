@@ -149,32 +149,70 @@ class Model(object):
 
         self.log('===== FEATURE EXTRACTION END =====')
 
+    def combine(self):
+        """组合特征"""
+        self.log('\n===== FEATURE COMBINATION START =====')
+
+        data_types = ['train', 'test']
+        for data_type in data_types:
+            feature_combined_file = data_type + '.h5'
+            path_to_feature_combined_file = self.path_to_features + feature_combined_file
+            # self.log('[INFO] [combine.target]', path_to_feature_combined_file)
+            combined_f5 = h5py.File(path_to_feature_combined_file, 'w')
+            self.log('[INFO] [combine.target]', combined_f5)
+            # self.log('[DEBUG] [combine.target]', dir(combined_f5))
+            feature_type_dir = self.path_to_features + data_type + '/'
+            self.log('[INFO] [combine.dir]', feature_type_dir)
+            for feature_type_file in os.listdir(feature_type_dir):
+                path_to_feature_type_file = feature_type_dir + feature_type_file
+                if not feature_type_file.endswith('.h5'):
+                    self.log('[INFO] h5 file for "%s" not found, skipped' % feature_type_file)
+                    continue
+                video_id = feature_type_file.split('.')[0]
+                # Read h5
+                feat_h5 = h5py.File(path_to_feature_type_file, 'r')
+                self.log('[INFO] [feat_h5]', video_id, feat_h5)
+                # self.log('[INFO] [feat_h5]', feat_h5.keys())
+                # self.log('[DEBUG] [feat_h5]', dir(feat_h5))
+
+                # Filenames
+                filenames = feat_h5['filenames']
+                # self.log('[INFO] [filenames]', filenames)
+                np_filenames = np.array(filenames)
+                # self.log('[INFO] [np_filenames]', np_filenames)
+
+                # Resnet
+                layer = self.pool_layer
+                if layer not in feat_h5.keys():
+                    self.log('[ERROR] [feat_h5] "%s" not in output layers!' % layer)
+                    return
+                layer_dset = feat_h5[layer]
+                # self.log('[INFO] [resnet_v2_152.layer]', layer_dset)
+                # self.log('[DEBUG] [resnet_v2_152.layer]', dir(layer_dset))
+                np_res_layer_dset = np.array(layer_dset)
+                # self.log('[DEBUG] [np_res_layer_dset]', dir(np_res_layer_dset))
+                self.log('[INFO] [np_res_layer_dset.size]', np_res_layer_dset.shape)
+                self.log('[INFO] [np_res_layer_dset.dtype]', np_res_layer_dset.dtype)
+                combined_f5.create_dataset(video_id, np_res_layer_dset.shape,
+                                           np_res_layer_dset.dtype, np_res_layer_dset)
+
+        self.log('===== FEATURE COMBINATION END =====')
+
     def train(self):
         """训练模型"""
         self.log('\n===== TRAINING PHASE START =====')
+        data_type = 'train'
+        feature_combined_file = data_type + '.h5'
+        path_to_feature_combined_file = self.path_to_features + feature_combined_file
+        combined_f5 = h5py.File(path_to_feature_combined_file, 'r')
+        self.log('[INFO] [combined]', combined_f5)
+        self.log('[INFO] [combined]', combined_f5.keys())
+        # self.log('[DEBUG] [combined]', dir(combined_f5))
 
-        train_feature_file = self.path_to_features + 'train/ZJL1.h5'
-        feat_h5 = h5py.File(train_feature_file, 'r')
-        self.log('[INFO] [feat_ht]', feat_h5)
-        self.log('[INFO] [feat_ht]', feat_h5.keys())
-        # self.log('[DEBUG] [feat_ht]', dir(feat_h5))
-
-        # Filenames
-        filenames = feat_h5['filenames']
-        self.log('[INFO] [filenames]', filenames)
-        np_filenames = np.array(filenames)
-        self.log('[INFO] [np_filenames]', np_filenames)
-
-        # Resnet
-        layer = self.pool_layer
-        if layer not in feat_h5.keys():
-            self.log('[ERROR] [feat_ht] "%s" not in output layers!' % layer)
-            return
-        layer_dset = feat_h5[layer]
-        self.log('[INFO] [resnet_v2_152.layer]', layer_dset)
-        self.log('[DEBUG] [resnet_v2_152.layer]', dir(layer_dset))
-        np_res_layer_dset = np.array(layer_dset)
-        self.log('[INFO] [np_res_layer_dset]', np_res_layer_dset)
+        for video_id in combined_f5.keys():
+            feature_dset = combined_f5[video_id]
+            np_feature_dset = np.array(feature_dset)
+            self.log('[INFO] [np_feature_dset]', video_id, np_feature_dset.shape)
 
         self.log('===== TRAINING PHASE END =====')
 
@@ -230,7 +268,8 @@ def main():
     # model.pre_process()
     # model.sample(1, args.path_to_sampled_images_1fpv)
     # model.sample(5, args.path_to_sampled_images_5fpv)
-    # model.extract_feature()
+    model.extract_feature()
+    model.combine()
     model.train()
     # model.predict()
 
