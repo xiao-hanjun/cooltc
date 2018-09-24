@@ -157,7 +157,7 @@ class Model(object):
                        '--layer_names', layer_names,
                        '--preproc_func', preproc_func]
                 self.log('[INFO] [CMD]', ' '.join(cmd))
-                returncode = 0 # subprocess.call(cmd)
+                returncode = subprocess.call(cmd)
                 if returncode == 0:
                     self.log('[INFO] feature extraction for %s succeeded!' % image_path)
                 else:
