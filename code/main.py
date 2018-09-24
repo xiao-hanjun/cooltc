@@ -18,7 +18,6 @@ class Model(object):
     def __init__(self, args):
         # Initialize with args
         self.debug = args.debug
-        self.logits_layer = 'logits'
         self.path_to_submit_file = args.path_to_submit_file
         self.path_to_checkpoints = args.path_to_checkpoints
         self.path_to_images = args.path_to_images
@@ -26,6 +25,7 @@ class Model(object):
         self.path_to_dataset_a = args.path_to_dataset_a
         self.path_to_dataset_b = args.path_to_dataset_b
         # Initialize fields
+        self.pool_layer = 'global_pool'
         self.train_data = []
         self.train_label = []
         self.test_data = []
@@ -122,7 +122,7 @@ class Model(object):
                 continue
             network = 'resnet_v2_152'
             path_to_resnet_checkpoint = self.path_to_checkpoints + 'resnet_v2_152_2017_04_14/resnet_v2_152.ckpt'
-            layer_names = network + '/' + self.logits_layer
+            layer_names = self.pool_layer
             preproc_func = 'inception'
             cmd = ['python', './code/TF_FeatureExtraction/example_feat_extract.py',
                    '--network', network,
@@ -159,11 +159,17 @@ class Model(object):
         resnet_v2_152 = feat_h5['resnet_v2_152']
         self.log('[INFO] [resnet_v2_152]', resnet_v2_152)
         # self.log('[DEBUG] [resnet_v2_152]', dir(resnet_v2_152))
-        logits = resnet_v2_152[self.logits_layer]
-        self.log('[INFO] [resnet_v2_152.layer]', logits)
-        # self.log('[DEBUG] [resnet_v2_152.layer]', dir(logits))
-        np_logits = np.array(logits)
-        self.log('[INFO] [np_logits]', np_logits)
+        self.log('[INFO] [resnet_v2_152]', resnet_v2_152.keys())
+        layer = self.pool_layer
+        if layer not in resnet_v2_152.keys():
+            self.log('[ERROR] [resnet_v2_152] "%s" not in output layers!' % layer)
+            return
+
+        layer_dset = resnet_v2_152[layer]
+        self.log('[INFO] [resnet_v2_152.layer]', layer_dset)
+        self.log('[DEBUG] [resnet_v2_152.layer]', dir(layer_dset))
+        np_res_layer_dset = np.array(layer_dset)
+        self.log('[INFO] [np_res_layer_dset]', np_res_layer_dset)
 
         self.log('===== TRAINING PHASE END =====')
 
@@ -217,9 +223,9 @@ def main():
     args = parse_args()
     model = Model(args)
     # model.pre_process()
-    # model.sample(1, args.path_to_sampled_images_1fpv)
-    # model.sample(5, args.path_to_sampled_images_5fpv)
-    model.extract_feature()
+    model.sample(1, args.path_to_sampled_images_1fpv)
+    model.sample(5, args.path_to_sampled_images_5fpv)
+    # model.extract_feature()
     # model.train()
     # model.predict()
 
