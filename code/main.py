@@ -153,9 +153,10 @@ class Model(object):
         """训练模型"""
         self.log('\n===== TRAINING PHASE START =====')
 
-        train_feature_file = self.path_to_features + 'train.h5'
+        train_feature_file = self.path_to_features + 'train/ZJL1.h5'
         feat_h5 = h5py.File(train_feature_file, 'r')
         self.log('[INFO] [feat_ht]', feat_h5)
+        self.log('[INFO] [feat_ht]', feat_h5.keys())
         # self.log('[DEBUG] [feat_ht]', dir(feat_h5))
 
         # Filenames
@@ -165,16 +166,11 @@ class Model(object):
         self.log('[INFO] [np_filenames]', np_filenames)
 
         # Resnet
-        resnet_v2_152 = feat_h5['resnet_v2_152']
-        self.log('[INFO] [resnet_v2_152]', resnet_v2_152)
-        # self.log('[DEBUG] [resnet_v2_152]', dir(resnet_v2_152))
-        self.log('[INFO] [resnet_v2_152]', resnet_v2_152.keys())
         layer = self.pool_layer
-        if layer not in resnet_v2_152.keys():
-            self.log('[ERROR] [resnet_v2_152] "%s" not in output layers!' % layer)
+        if layer not in feat_h5.keys():
+            self.log('[ERROR] [feat_ht] "%s" not in output layers!' % layer)
             return
-
-        layer_dset = resnet_v2_152[layer]
+        layer_dset = feat_h5[layer]
         self.log('[INFO] [resnet_v2_152.layer]', layer_dset)
         self.log('[DEBUG] [resnet_v2_152.layer]', dir(layer_dset))
         np_res_layer_dset = np.array(layer_dset)
@@ -234,8 +230,8 @@ def main():
     # model.pre_process()
     # model.sample(1, args.path_to_sampled_images_1fpv)
     # model.sample(5, args.path_to_sampled_images_5fpv)
-    model.extract_feature()
-    # model.train()
+    # model.extract_feature()
+    model.train()
     # model.predict()
 
 
