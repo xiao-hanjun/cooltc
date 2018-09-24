@@ -96,7 +96,7 @@ task debug_5fpv_main_yuan_B_train_0(type: Exec) {
     group 'cooltc'
     description 'Run python solution for cooltc with debug info shown'
     commandLine 'python', 'code/main.py', '--debug',
-            '--partition', 'B_train_0'
+            '--partition', 'B_train_0',
             '--path-to-images', './data/images_5fpv/',
             '--path-to-features', './data/features_5fpv/',
             '--path-to-checkpoints', '/Users/yuan/MyDocument/workspace/Python/tensorflow_model/checkpoints/'
@@ -106,7 +106,7 @@ task debug_5fpv_main_yuan_B_train_1(type: Exec) {
     group 'cooltc'
     description 'Run python solution for cooltc with debug info shown'
     commandLine 'python', 'code/main.py', '--debug',
-            '--partition', 'B_train_1'
+            '--partition', 'B_train_1',
             '--path-to-images', './data/images_5fpv/',
             '--path-to-features', './data/features_5fpv/',
             '--path-to-checkpoints', '/Users/yuan/MyDocument/workspace/Python/tensorflow_model/checkpoints/'
