@@ -91,7 +91,7 @@ class Model(object):
                 sampled_image_path = path_to_sampled_images + data_type + '/' + video_id + '/'
                 if os.path.isdir(sampled_image_path):
                     self.log('[INFO] sampled images for video %s already existed. skipped.' % video_id)
-                    return
+                    continue
                 subprocess.call(['mkdir', '-p', sampled_image_path])
                 video_images = [x for x in image_files if x.startswith(video_id + '_')]
                 video_images.sort()
@@ -224,10 +224,10 @@ def main():
     args = parse_args()
     model = Model(args)
     # model.pre_process()
-    model.sample(1, args.path_to_sampled_images_1fpv)
-    model.sample(5, args.path_to_sampled_images_5fpv)
-    # model.extract_feature()
-    # model.train()
+    # model.sample(1, args.path_to_sampled_images_1fpv)
+    # model.sample(5, args.path_to_sampled_images_5fpv)
+    model.extract_feature()
+    model.train()
     # model.predict()
 
 
