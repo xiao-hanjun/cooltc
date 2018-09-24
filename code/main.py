@@ -121,12 +121,14 @@ class Model(object):
             image_type_path = self.path_to_images + data_type + '/'
             image_dirs = os.listdir(image_type_path)
             for image_id in image_dirs:
+                image_path = image_type_path + image_id + '/'
+                if not os.path.isdir(image_path):
+                    continue
                 out_file = out_type_path + image_id + '.h5'
                 self.log('[INFO]', out_file)
                 if os.path.isfile(out_file):
                     self.log('[INFO] feature for %s already extracted, skipped' % data_type)
                     continue
-                image_path = image_type_path + image_id + '/'
                 network = 'resnet_v2_152'
                 path_to_resnet_checkpoint = self.path_to_checkpoints + 'resnet_v2_152_2017_04_14/resnet_v2_152.ckpt'
                 layer_names = self.pool_layer
