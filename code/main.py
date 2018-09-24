@@ -18,6 +18,7 @@ class Model(object):
     def __init__(self, args):
         # Initialize with args
         self.debug = args.debug
+        self.partition = args.partition
         self.path_to_submit_file = args.path_to_submit_file
         self.path_to_checkpoints = args.path_to_checkpoints
         self.path_to_images = args.path_to_images
@@ -26,6 +27,7 @@ class Model(object):
         self.path_to_dataset_b = args.path_to_dataset_b
         # Initialize fields
         self.pool_layer = 'global_pool'
+        self.id_cutoff = 4285
         self.train_data = []
         self.train_label = []
         self.test_data = []
@@ -120,14 +122,28 @@ class Model(object):
             subprocess.call(['mkdir', '-p', out_type_path])
             image_type_path = self.path_to_images + data_type + '/'
             image_dirs = os.listdir(image_type_path)
-            for image_id in image_dirs:
-                image_path = image_type_path + image_id + '/'
+            for video_id in image_dirs:
+                image_path = image_type_path + video_id + '/'
                 if not os.path.isdir(image_path):
                     continue
-                out_file = out_type_path + image_id + '.h5'
+                # exclude dataset A
+                int_id = int(video_id[3:])
+                partition = 'B_'
+                if int_id < self.id_cutoff:
+                    partition = 'A_'
+                out_file = out_type_path + video_id + '.h5'
                 self.log('[INFO]', out_file)
                 if os.path.isfile(out_file):
                     self.log('[INFO] feature for %s already extracted, skipped' % data_type)
+                    continue
+                partition += data_type
+                if data_type == 'train':
+                    if partition.startswith('B'):
+                        partition += '_' + str(int_id % 2)
+                    else:
+                        partition += '_' + str(int_id % 4)
+                if partition != self.partition:
+                    self.log('[INFO] video %s is from another partition %s, skipped' % (video_id, partition))
                     continue
                 network = 'resnet_v2_152'
                 path_to_resnet_checkpoint = self.path_to_checkpoints + 'resnet_v2_152_2017_04_14/resnet_v2_152.ckpt'
@@ -141,7 +157,7 @@ class Model(object):
                        '--layer_names', layer_names,
                        '--preproc_func', preproc_func]
                 self.log('[INFO] [CMD]', ' '.join(cmd))
-                returncode = subprocess.call(cmd)
+                returncode = 0 # subprocess.call(cmd)
                 if returncode == 0:
                     self.log('[INFO] feature extraction for %s succeeded!' % image_path)
                 else:
@@ -232,6 +248,9 @@ def parse_args():
     parser = argparse.ArgumentParser(
         description = 'Process short videos and answer questions')
     filename = 'submit_%s.txt' % datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+    parser.add_argument('--partition',
+                        default='B_test',
+                        help='Feature extraction partition')
     parser.add_argument('--path-to-submit-file',
                         default='./submit/' + filename,
                         help='Path to submit file')
@@ -270,7 +289,7 @@ def main():
     # model.sample(5, args.path_to_sampled_images_5fpv)
     model.extract_feature()
     model.combine()
-    model.train()
+    # model.train()
     # model.predict()
 
 
